@@ -7,6 +7,7 @@ async function query(queryObject) {
     user: process.env.POSTGRES_USER,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
+    ssl: process.env.NODE_ENV === "development"? false :true,
   });
   console.log('Credenciais do PostgreSQL:', {
     host: process.env.POSTGRES_HOST,
@@ -26,14 +27,13 @@ async function query(queryObject) {
   }
   finally {
     // Garante que a conexão fecha mesmo se a query falhar
-    try {
-      await client.end();
-  } catch (endError) {
-    // Evita mascarar o erro original caso o end() falhe por falta de conexão
+      try {
+        await client.end();
+    } catch (endError) {
+      // Evita mascarar o erro original caso o end() falhe por falta de conexão
+    }
   }
 }
-
-
 
 export default {
   //propriedade : função
